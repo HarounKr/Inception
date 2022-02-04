@@ -7,6 +7,6 @@ RUN apt-get install -y openssl
 
 EXPOSE 80
 
-#COPY ./script.sh ./
-
-#CMD ["bash", "script.sh"]
+COPY ./script.sh ./
+#RUN bash script.sh
+CMD ["bash", "script.sh"]
