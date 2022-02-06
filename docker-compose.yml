@@ -4,8 +4,34 @@ services:
   nginx:
     container_name: nginx
     build: ./srcs/requirements/nginx/
+    depends_on:
+      - wordpress
+    restart: on-failure
     ports:
-      - 8080:80
+      - 80:80
+    networks:
+      - mynetwork
   wordpress:
     container_name: wordpress
     build: ./srcs/requirements/wordpress/
+    depends_on: 
+      - db
+    restart: on-failure
+    env_file: .env
+    environment:
+      - WORDPRESS_DB_USER=$MYSQL_USER
+      - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
+      - WORDPRESS_DB_NAME=wordpress
+    networks:
+      - mynetwork
+  db:
+    container_name: mariadb
+    build: ./srcs/requirements/wordpress/
+    restart: on-failure
+    environment:
+      - MYSQL_DATABASE=wordpress
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
