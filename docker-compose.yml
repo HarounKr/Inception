@@ -6,9 +6,11 @@ services:
     build: ./srcs/requirements/nginx/
     depends_on:
       - wordpress
+    volumes:
+      - src:/var/www/
     restart: on-failure
     ports:
-      - 80:80
+      - 443:443
     networks:
       - mynetwork
   wordpress:
@@ -17,6 +19,10 @@ services:
     depends_on: 
       - db
     restart: on-failure
+    ports:
+      - 9000:9000
+    volumes:
+      - src:/var/www/
     env_file: .env
     environment:
       - WORDPRESS_DB_USER=$MYSQL_USER
@@ -28,10 +34,27 @@ services:
     container_name: mariadb
     build: ./srcs/requirements/wordpress/
     restart: on-failure
+    ports:
+      - 3306:3306
+    volumes:
+      - data-base:/var/lib/mysql/
     environment:
-      - MYSQL_DATABASE=wordpress
+      - MYSQL_DATABASE=wrdpress
     networks:
       - mynetwork
 
+volumes:
+  src:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/hkrifa/data/wordpress'
+  data-base:
+     driver: local
+     driver_opts:
+       type: 'none'
+       o: 'bind'
+       device: '/home/hkrifa/data/mariadb'
 networks:
   mynetwork:
