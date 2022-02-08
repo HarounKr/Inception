@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  nginx:
+    container_name: nginx
+    build: ./srcs/requirements/nginx/
+    depends_on:
+      - wordpress
+    volumes:
+      - src:/var/www/html/
+    restart: on-failure
+    ports:
+      - 443:443
+    networks:
+      - mynetwork
+  wordpress:
+    container_name: wordpress
+    build: ./srcs/requirements/wordpress/
+    depends_on: 
+      - db
+    restart: on-failure
+    ports:
+      - 9000:9000
+    volumes:
+      - src:/var/www/html/
+    env_file: .env
+    networks:
+      - mynetwork
+  db:
+    container_name: mariadb
+    build: ./srcs/requirements/mariadb/
+    restart: on-failure
+    ports:
+      - 3306:3306
+    volumes:
+      - data-base:/var/lib/mysql/
+    env_file: .env 
+    networks:
+      - mynetwork
+
+volumes:
+  src:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/hkrifa/data/wordpress'
+  data-base:
+     driver: local
+     driver_opts:
+       type: 'none'
+       o: 'bind'
+       device: '/home/hkrifa/data/mariadb'
+networks:
+  mynetwork:
