@@ -3,7 +3,7 @@ version: "3.8"
 services:
   nginx:
     container_name: nginx
-    build: ./srcs/requirements/nginx/
+    build: ./requirements/nginx/
     depends_on:
       - wordpress
     volumes:
@@ -15,9 +15,9 @@ services:
       - mynetwork
   wordpress:
     container_name: wordpress
-    build: ./srcs/requirements/wordpress/
+    build: ./requirements/wordpress/
     depends_on: 
-      - db
+      - mariadb
     restart: on-failure
     ports:
       - 9000:9000
@@ -26,9 +26,9 @@ services:
     env_file: .env
     networks:
       - mynetwork
-  db:
+  mariadb:
     container_name: mariadb
-    build: ./srcs/requirements/mariadb/
+    build: ./requirements/mariadb/
     restart: on-failure
     ports:
       - 3306:3306
