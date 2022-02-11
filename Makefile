@@ -4,7 +4,7 @@ up:
 	@mkdir -p /home/hkrifa/data/mariadb
 	@mkdir -p /home/hkrifa/data/wordpress
 	@printf '\e[38;5;87m'
-	docker-compose -f srcs/docker-compose.yml up
+	docker-compose -f srcs/docker-compose.yml up -d
 	@printf '\e[38;5;82mThe containers are up but please wait for the servers to start !\e[0m \n'
 	@sudo chmod 777 /etc/hosts
 	@printf '127.0.0.1 hkrifa.42.fr ' >> /etc/hosts
